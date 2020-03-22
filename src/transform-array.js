@@ -1,103 +1,47 @@
 module.exports = function transform(arr) {
-  // throw 'Not implemented';
-  // remove line with error and write your code here
-  // console.log(arr);
-  if (arr instanceof Array) {
-    if (arr.length === 0) {
-      return arr;
-    }
-    let count = 0;
-    arr.forEach(item => {
-      if (
-        item === "--discard-next" ||
-        item === "--discard-prev" ||
-        item === "--double-next" ||
-        item === "--double-prev"
-      ) {
-        count += 1;
-      }
-    });
-    if (count === 0) {
-      return arr;
-    }
-    let solution;
-    for (let j = 1; j <= count; j++) {
-      for (let i = 0; i < arr.length; i++) {
-        switch (arr[i]) {
-          case "--discard-next":
-            solution = discardNext(arr, i);
+  const result = [];
+  if (Array.isArray(arr)) {
+    for (let i = 0; i < arr.length; i++) {
+      switch (arr[i]) {
+        case "--discard-next": {
+          if (i < arr.length - 1) {
+            i++;
             break;
-          case "--discard-prev":
-            solution = discardPrev(arr, i);
+          }
+          break;
+        }
+        case "--discard-prev": {
+          if (result.length > 0) {
+            result.pop();
             break;
-          case "--double-next":
-            solution = doubleNext(arr, i);
+          }
+          break;
+        }
+
+        case "--double-prev": {
+          if (i > 0) {
+            result.push(arr[i - 1]);
             break;
-          case "--double-prev":
-            solution = doublePrev(arr, i);
+          }
+          break;
+        }
+
+        case "--double-next": {
+          if (i < arr.length - 1) {
+            result.push(arr[i + 1]);
             break;
+          }
+          break;
+        }
+
+        default: {
+          result.push(arr[i]);
+          break;
         }
       }
     }
-
-    return solution;
+    return result;
   } else {
-    throw "throw";
+    throw new Error("Not an Array!");
   }
 };
-function discardNext(arr, i) {
-  if (
-    arr[i + 1] ||
-    arr[i + 1] === false ||
-    arr[i + 1] === NaN ||
-    arr[i + 1] === null
-  ) {
-    arr.splice(i, 2);
-    return arr;
-  }
-
-  arr.pop();
-
-  return arr;
-}
-function discardPrev(arr, i) {
-  if (
-    arr[i - 1] ||
-    arr[i - 1] === false ||
-    arr[i - 1] === NaN ||
-    arr[i - 1] === null
-  ) {
-    arr.splice(i - 1, 2);
-    return arr;
-  }
-  arr.shift();
-
-  return arr;
-}
-function doubleNext(arr, i) {
-  if (
-    arr[i + 1] ||
-    arr[i + 1] === false ||
-    arr[i + 1] === NaN ||
-    arr[i + 1] === null
-  ) {
-    arr[i] = arr[i + 1];
-    return arr;
-  }
-  arr.pop();
-  return arr;
-}
-function doublePrev(arr, i) {
-  if (
-    arr[i - 1] ||
-    arr[i - 1] === false ||
-    arr[i - 1] === NaN ||
-    arr[i - 1] === null
-  ) {
-    arr[i] = arr[i - 1];
-    return arr;
-  }
-
-  arr.shift();
-  return arr;
-}

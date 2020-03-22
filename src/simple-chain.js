@@ -4,20 +4,21 @@ const chainMaker = {
     return this.mas.length;
   },
   addLink(value) {
-    if (value) {
-      this.mas.push(`( ${value} )`);
-    } else {
-      this.mas.push(`()`);
-    }
+    this.mas.push(`( ${value} )`);
 
     return this;
   },
   removeLink(position) {
-    if (Number.isInteger(position)) {
-      this.mas.splice(position, 1);
-      return this;
+    if (
+      position <= 0 ||
+      position > this.getLength() ||
+      !Number.isInteger(position)
+    ) {
+      this.mas = [];
+      throw new Error();
     } else {
-      throw "throw";
+      this.mas.splice(position - 1, 1);
+      return this;
     }
   },
   reverseChain() {
@@ -25,7 +26,9 @@ const chainMaker = {
     return this;
   },
   finishChain() {
-    return this.mas.join("~~");
+    const res = this.mas.join("~~");
+    this.mas = [];
+    return res;
   }
 };
 
